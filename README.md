@@ -161,6 +161,67 @@ with mlflow.start_run():
 
 ---
 
+## Логирование и мониторинг
+
+### Формат логов
+
+Каждый запрос к `/predict` записывается в `app/api.log` в JSON-формате (одна строка = одно событие):
+
+```json
+{
+  "timestamp": "2024-01-15T10:23:45.123456+00:00",
+  "user_id": "u_12345",
+  "model_version": "v1",
+  "prediction": 0,
+  "probability": 0.27
+}
+```
+
+Такой формат позволяет парсить логи без регулярных выражений и напрямую индексировать в Elasticsearch.
+
+### A/B роутинг
+
+`POST /predict` принимает опциональный параметр `user_id`:
+- `user_id` передан → MD5-хэш: чётный = **model_v1**, нечётный = **model_v2**
+- `user_id` не передан → всегда **model_v1** (fallback)
+
+Ответ содержит поле `"model_version": "v1"` или `"v2"`:
+
+```bash
+curl -X POST http://localhost:5000/predict \
+  -H "Content-Type: application/json" \
+  -d '{"user_id": "u_42", "LIMIT_BAL": 50000, ...}'
+# {"prediction": 0, "probability": 0.31, "model_version": "v2"}
+```
+
+### ELK-стек в production
+
+В production-среде логи из `api.log` собираются и обрабатываются через ELK-стек:
+
+```
+app/api.log
+    │
+    ▼
+Filebeat          ← агент на сервере, читает файл и отправляет строки
+    │
+    ▼
+Logstash          ← парсит JSON, обогащает метаданными (host, env)
+    │
+    ▼
+Elasticsearch     ← индексирует, хранит, делает полнотекстовый поиск
+    │
+    ▼
+Kibana            ← дашборды: доля дефолтов по модели, дрейф данных, RPM
+```
+
+**Ключевые дашборды в Kibana:**
+- Доля предсказаний `prediction=1` по времени → детектирует drift
+- Split по `model_version` → live-сравнение A/B групп
+- P50/P99 задержек запросов
+- Error rate (400/500 статусы)
+
+---
+
 ## Бизнес-метрики
 
 ### Снижение финансовых потерь
