@@ -46,6 +46,11 @@ FEATURES = [
 
 
 # ── A/B роутинг ───────────────────────────────────────────────────────────────
+def get_model_version(user_id) -> str:
+    hash_val = int(hashlib.md5(str(user_id).encode()).hexdigest(), 16)
+    return "v2" if hash_val % 2 == 1 else "v1"
+
+
 def select_model(user_id: str | None):
     """Возвращает (версия, предсказатель).
     Если user_id не передан — всегда v1 (детерминированный fallback).
@@ -53,11 +58,8 @@ def select_model(user_id: str | None):
     if user_id is None:
         return "v1", _predict_v1
 
-    hash_val = int(hashlib.md5(user_id.encode()).hexdigest(), 16)
-    if hash_val % 2 == 0:
-        return "v1", _predict_v1
-    else:
-        return "v2", _predict_v2
+    version = get_model_version(user_id)
+    return (version, _predict_v1) if version == "v1" else (version, _predict_v2)
 
 
 def _predict_v1(X: np.ndarray):
