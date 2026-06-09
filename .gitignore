@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environments
+.env
+.env.*
+venv/
+.venv/
+env/
+
+# Models (large binary files)
+models/*.pkl
+
+# Datasets
+*.csv
+
+# Logs
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Claude
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
