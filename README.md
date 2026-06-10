@@ -15,13 +15,22 @@ credit-card-ml/
 │   ├── model_v1.pkl        # RandomForestClassifier
 │   └── model_v2.pkl        # LogisticRegression + StandardScaler
 ├── notebooks/              # EDA и эксперименты
+├── screenshots/            # Скриншоты демонстрации работы API
+│   ├── 1.1_docker_run.png
+│   ├── 1.2_docker_health.png
+│   ├── 1.3_docker_predict_ab_test.png
+│   ├── 2.1_github_local_run.png
+│   ├── 2.2_github_health.png
+│   └── 2.3_github_predict_ab_test.png
 ├── tests/                  # Unit и интеграционные тесты
+├── UCI_Credit_Card.csv     # Датасет UCI Credit Card (30 000 записей)
 ├── train_model.py          # Скрипт обучения моделей
 ├── requirements.txt
 ├── Dockerfile
 ├── docker-compose.yml
 ├── .gitignore
-└── ab_test_plan.md
+├── ab_test_plan.md
+└── README.md
 ```
 
 ---
