@@ -12,7 +12,6 @@ venv/
 env/
 
 # Models (large binary files)
-models/*.pkl
 
 
 # Logs
