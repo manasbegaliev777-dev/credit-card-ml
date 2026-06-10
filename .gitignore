@@ -14,8 +14,6 @@ env/
 # Models (large binary files)
 models/*.pkl
 
-# Datasets
-*.csv
 
 # Logs
 *.log
