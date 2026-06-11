@@ -5,6 +5,21 @@ ML-сервис для прогнозирования дефолта по кре
 
 ---
 
+## Требования
+- Python 3.12
+- pip
+- Docker (опционально)
+
+---
+
+## Датасет
+Используется Default of Credit Card Clients Dataset с UCI Machine Learning Repository.
+- Ссылка для скачивания: https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients
+- Файл UCI_Credit_Card.csv включён в репозиторий (30 000 записей, 25 признаков)
+- Целевая переменная: default.payment.next.month (1 — дефолт, 0 — нет дефолта)
+
+---
+
 ## Структура репозитория
 
 ```
@@ -47,6 +62,10 @@ python train_model.py
 # 3. Запустить сервис
 python app/api.py
 # Сервис доступен на http://localhost:5000
+
+# 4. Убедиться что сервис работает
+curl http://localhost:5000/health
+# Ожидаемый ответ: {"status": "healthy"}
 ```
 
 ---
